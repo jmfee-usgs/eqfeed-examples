@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Earthquake counts</title>
+</head>
+<body>
+<div class="eqcounts"></div>
+<script>
+	// Jeremy Fee <jmfee@usgs.gov>
+	// 2014-06-06
+	// Use geojsonp feed to count earthquakes at given magnitudes
+
+
+	// available feeds are listed on this page
+	// http://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php
+	// NOTE: the "geojsonp" extension instead of "geojson"
+	var EQFEED = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_week.geojsonp';
+
+
+	var EL = document.querySelector('.eqcounts');
+	EL.innerHTML = 'Loading feed ' + EQFEED;
+
+	function eqfeed_callback(feed) {
+		var eqs = feed.features,
+		    meta = feed.metadata,
+		    eq,
+		    i,
+		    len,
+		    magnitudes,
+		    mag,
+		    buf;
+
+		magnitudes = {};
+		for (i = 0, len = eqs.length; i < len; i++) {
+			eq = eqs[i];
+			mag = Math.floor(eq.properties.mag);
+			magnitudes[mag] = (magnitudes[mag] || 0) + 1;
+		}
+
+		buf = [];
+		buf.push('<h1>', meta.title, '</h1>');
+		buf.push('<p>',
+				'Updated: ', new Date(meta.generated).toISOString(), '<br/>',
+				'<small>URL: ', meta.url, '</small>',
+				'</p>');
+		buf.push('<table>');
+		buf.push('<thead><tr><th>Magnitude</th><th>Count</th></tr></thead>');
+		buf.push('<tbody>');
+		for (mag in magnitudes) {
+			buf.push('<tr><td>', mag, '</td><td>', magnitudes[mag], '</td></tr>');
+		}
+		buf.push('</tbody>');
+		buf.push('</table>');
+		EL.innerHTML = buf.join('');
+	}
+
+	var eqs = document.createElement('script');
+	eqs.src = EQFEED;
+	document.querySelector('script').parentNode.appendChild(eqs);
+</script>
+</body>
+</html>
