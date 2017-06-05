@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Earthquake List Widget</title>
+  <link rel="stylesheet" href="https://earthquake.usgs.gov/lib/earthquake-list-widget-0.1.2/earthquake-list-widget.css"/>
+  <style>
+    .earthquakes {
+      border: 1px solid #eee;
+      margin: 1em;
+      max-width: 320px;
+    }
+  </style>
+</head>
+<body>
+<div class="earthquakes"></div>
+<script src="https://earthquake.usgs.gov/lib/earthquake-list-widget-0.1.2/earthquake-list-widget.js"></script>
+<script>
+  'use strict';
+
+  // Jeremy Fee <jmfee@usgs.gov>
+  // 2017-06-05
+  // Example of list widget.
+
+  // available feeds are listed on this page
+  // https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php
+  // NOTE: the "geojsonp" extension instead of "geojson"
+
+  // the list widget source is available on github
+  // https://github.com/usgs/earthquake-list-widget
+
+  var EqList = require('listwidget/EqList');
+
+
+  var el,
+      url;
+
+  url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojsonp';
+  el = document.querySelector('.earthquakes');
+
+  EqList({
+    container: el,
+    feed: url
+  });
+</script>
+</body>
+</html>
